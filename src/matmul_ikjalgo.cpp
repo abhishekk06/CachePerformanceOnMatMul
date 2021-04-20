@@ -7,6 +7,16 @@
 
 using namespace std;
 
+void parsec_roi_begin() 
+{
+
+}
+
+void parsec_roi_end() 
+{
+
+}
+
 int getMatrixSize(string filename) {
 	string line;
 	ifstream infile;
@@ -81,7 +91,9 @@ int main (int argc, char* argv[]) {
 	vector<int> inner (n);
 	vector< vector<int> > A(n, inner), B(n, inner), C(n, inner);
 	read (filename, A, B);
+    parsec_roi_begin();
 	ikjalgorithm(A, B, C, n);
-	printMatrix(C, n);
+    parsec_roi_end();
+	//printMatrix(C, n);
 	return 0;
 }

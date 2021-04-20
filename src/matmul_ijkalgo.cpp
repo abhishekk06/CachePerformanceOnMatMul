@@ -6,6 +6,17 @@
 
 using namespace std;
 
+void parsec_roi_begin() 
+{
+
+}
+
+void parsec_roi_end() 
+{
+
+}
+
+
 struct Result {
 	vector< vector<int> > A;
 	vector< vector<int> > B;
@@ -88,8 +99,10 @@ int main (int argc, char* argv[]) {
 	} else {
 		filename = argv[2];
 	}
+    parsec_roi_begin();
 	Result result = read (filename);
 	vector< vector<int> > C = ijkalgorithm(result.A, result.B);
-	printMatrix(C);
+    parsec_roi_end();
+	#printMatrix(C);
 	return 0;
 }

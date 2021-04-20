@@ -9,6 +9,17 @@
 
 using namespace std;
 
+void parsec_roi_begin() 
+{
+
+}
+
+void parsec_roi_end() 
+{
+
+}
+
+
 int getMatrixSize(string filename) {
 	string line;
 	ifstream infile;
@@ -70,8 +81,10 @@ int main (int argc, char* argv[]) {
 	int n = getMatrixSize(filename);
 	boost::numeric::ublas::matrix<int> A(n,n), B(n,n), C(n,n);
 	read (filename, A, B);
+    parsec_roi_begin();
 	boost::numeric::ublas::axpy_prod(A, B, C);
-	printMatrix(C);
+    parsec_roi_end();
+	//printMatrix(C);
 
 	return 0;
 }

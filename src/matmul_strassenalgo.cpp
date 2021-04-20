@@ -18,6 +18,17 @@ using namespace std;
  * http://en.wikipedia.org/w/index.php?title=Strassen_algorithm&oldid=498910018#Source_code_of_the_Strassen_algorithm_in_C_language
  */
 
+void parsec_roi_begin() 
+{
+
+}
+
+void parsec_roi_end() 
+{
+
+}
+
+
 void strassen(vector< vector<int> > &A,
               vector< vector<int> > &B,
               vector< vector<int> > &C, unsigned int tam);
@@ -259,7 +270,9 @@ int main (int argc, char* argv[]) {
     vector<int> inner (n);
     vector< vector<int> > A(n, inner), B(n, inner), C(n, inner);
     read (filename, A, B);
+    parsec_roi_begin();
     strassen(A, B, C, n);
-    printMatrix(C, n);
+    parsec_roi_end();
+    //printMatrix(C, n);
     return 0;
 }
