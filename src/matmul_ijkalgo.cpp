@@ -103,6 +103,6 @@ int main (int argc, char* argv[]) {
 	Result result = read (filename);
 	vector< vector<int> > C = ijkalgorithm(result.A, result.B);
     parsec_roi_end();
-	#printMatrix(C);
+	//printMatrix(C);
 	return 0;
 }
