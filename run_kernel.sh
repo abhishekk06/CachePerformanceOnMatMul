@@ -5,7 +5,7 @@ export PIN_ROOT=/home/mdl/azk6085/CSE530/pin-3.18-98332-gaebd7b1e6-gcc-linux/
 input_file=${1:-'input_matrix.in'}
 build_type=${2:-'normal'}
 
-python utils/random_matrix_generator.py --n 10 --dump input_matrix.in
+python utils/random_matrix_generator.py --n 100 --dump input_matrix.in
 
 if [[ $build_type = "clean" ]];
 then
