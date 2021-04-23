@@ -1,10 +1,13 @@
 import random
 import argparse
 import os
+import math
+import numpy as np
 
 parser = argparse.ArgumentParser(description='Input Matrix generator')
 parser.add_argument('--seed', type=int, default=0, help='Seed Value')
 parser.add_argument('--n', type=int, default=3, help='Matrix order(nxn)')
+parser.add_argument('--sparsity', type=int, default=0, help='Sparisty of matrix in %')
 parser.add_argument('--dump', type=str, default='input_matrix.in', help='File name')
 
 
@@ -35,8 +38,30 @@ def main():
     random.seed(args.seed)
     n = args.n
     outpath = args.dump
+    #Create dense matrix
     matrixA = createRandomMatrix(n)
     matrixB = createRandomMatrix(n)
+    #print(matrixA)
+    #Convert to sparse matrix by replacing value below threshold to 0
+    if (args.sparsity):
+		#Replace random x %element to 0 in matrixA
+        matrixA = np.asarray(matrixA)
+        indicesA = np.random.choice(np.arange(matrixA.size), replace=False,
+                           size=int(matrixA.size * (args.sparsity/100)))
+        flatA  = matrixA.flatten()
+        flatA[indicesA] = 0
+		#Replace random x %element to 0 in matrixB
+        matrixB = np.asarray(matrixB)
+        indicesB = np.random.choice(np.arange(matrixB.size), replace=False,
+                           size=int(matrixB.size * (args.sparsity/100)))
+        flatB  = matrixB.flatten()
+        flatB[indicesB] = 0
+		#Reshape it back to square matrix	
+        flatA = flatA.reshape(n,n)
+        flatB = flatB.reshape(n,n)
+        matrixA = flatA.tolist()
+        matrixB = flatB.tolist()
+        #print(matrixA)
     saveMatrix(matrixA, matrixB, args.dump)
 
 if __name__ == '__main__':
