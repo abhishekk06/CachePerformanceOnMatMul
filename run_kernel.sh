@@ -34,6 +34,11 @@ echo Compiling Matmul_ijkalgo
 g++ -Wall src/matmul_ijkalgo.cpp -o bin/matmul_ijkalgo.o    
 #g++ -std=c++98 -Wall -O3 -g src/matmul_ijkalgo.cpp -o bin/matmul_ijkalgo.o -pedantic
 
+echo Compiling Matmul_csr
+g++ -Wall src/matmul_csr.cpp -o bin/matmul_csr.o
+#g++ -std=c++98 -Wall -O3 -g src/matmul_csr.cpp -o bin/matmul_csr.o -pedantic
+
+
 for entry in bin/*.o
 do
   f=$(echo "${entry##*/}");
