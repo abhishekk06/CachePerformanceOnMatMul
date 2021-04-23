@@ -31,7 +31,7 @@ static void sgemm_csr(int M, int N, int K, struct csr A, struct csr B, struct cs
 	C.col_ptr = (int*)malloc(M*M*sizeof(int));
 	for(m=0; m<M; m++){
 
-		if( m == M/128) return;
+		//if( m == M/128) return;
 		a_nnz_pr = A.row_ptr[m+1] - A.row_ptr[m];
 		if(a_nnz_pr == 0 )		
 		{	
@@ -100,9 +100,11 @@ int main(int argc, char **argv) {
 
 
 
-	A = csr_generator(10, 5); //read_csr(argv[1]);
-        B = csr_generator(10, 3); //read_csr(argv[2]); 
-	printf("Matrix A and B is ready");
+	//A = csr_generator(10, 5); //read_csr(argv[1]);
+    //B = csr_generator(10, 3); //read_csr(argv[2]); 
+	A = read_csr(argv[1]);
+    B = read_csr(argv[2]); 
+	printf("Matrix A and B is ready\n");
 	
 	parsec_roi_begin();
 	sgemm_csr(A.size,A.size,A.size,A,B,C);

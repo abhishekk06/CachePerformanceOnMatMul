@@ -46,9 +46,9 @@ def saveCSRMatrix(CSR_matrix, filename):
     f.write("\n")
     for row, col in zip(*CSR_matrix.nonzero()):
         val = CSR_matrix[row,col]
-        f.write("( "+str(row)+", ")
-        f.write(str(col)+" )")
-        f.write(" "+str(val))
+        f.write("Row: "+str(row)+", Col: ")
+        f.write(str(col)+", ")
+        f.write("Val: "+str(val)+".")
         f.write("\n")
     f.close()
 

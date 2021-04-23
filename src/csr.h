@@ -1,6 +1,14 @@
 #include <time.h>
 #include <stdlib.h>
+#include <fstream>
 #include <stdio.h>
+#include <string.h>
+#include<iostream>
+#include <deque>
+#include <assert.h>
+
+
+using namespace std;
 
 typedef struct csr{
 
@@ -69,12 +77,64 @@ csr read_csr(char *path)
 	printf("Read matrix %s\n",path);
 	FILE *fd;
 	fd = fopen(path,"r");
-
 	int rows, nnz;
-
-	fscanf(fd,"%d",&rows);
-	fscanf(fd,"%d",&nnz);
-	printf("Rows = %d Non-zero = %d \n",rows,nnz);
+    deque <int> row_entry;
+    deque <int> col_entry;
+    deque <int> val_entry;
+    int prev_row_val = -1;
+	
+	std::ifstream f(path);
+	std::string line;
+	long num_line;
+	for (num_line = 0; std::getline(f, line); ++num_line)
+    {
+        //cout<<line<<endl;
+        if(num_line) {
+            // Populate row dq
+            unsigned first = line.find("Row: ");
+            unsigned last = line.find(", Col:");
+            string row = line.substr(first+5, last-5-first);
+            int substr_val = atoi(row.c_str());
+            //cout<<"Row:"<<substr_val<<endl;
+            if(num_line == 1)
+            {
+                row_entry.push_back(substr_val);
+                prev_row_val = substr_val;
+            }
+            if(prev_row_val != substr_val) {
+                prev_row_val += substr_val;
+                row_entry.push_back(prev_row_val);
+            } 
+    
+            // Populate col dq    
+            first = line.find(", Col: ");
+            last = line.find(", Val:");
+            string col = line.substr((first+7),last-7-first);
+            substr_val = atoi(col.c_str());
+            //cout<<"Col:"<<substr_val<<endl;
+            col_entry.push_back(substr_val);
+    
+            // Populate val dq
+            first = line.find(", Val: ");
+            last = line.find(".");
+            string val = line.substr((first+7),last-7-first);
+            substr_val = atoi(val.c_str());
+            //cout<<"Val:"<<substr_val<<endl;
+            val_entry.push_back(substr_val);
+        } else {
+	        fscanf(fd,"%d",&rows);
+        }
+    }
+	//fscanf(fd,"%d",&rows);
+	//fscanf(fd,"%d",&nnz);
+    nnz = num_line - 1;
+	printf("Rows = %d Non-zero = %d \n",rows, nnz);
+    cout<<"Row dq size "<<row_entry.size()<<endl;
+    cout<<"Col dq size "<<col_entry.size()<<endl;
+    cout<<"Val dq size "<<val_entry.size()<<endl;
+    //assert ((int)row_entry.size()==rows);
+    assert ((int)col_entry.size()==nnz);
+    assert ((int)val_entry.size()==nnz);
 
 	csr csr_out;
 	
@@ -83,22 +143,26 @@ csr read_csr(char *path)
 	csr_out.val = (float*) malloc(nnz*sizeof(float));
 	csr_out.size = rows;
 
-	int row,col;
-	float value;
+	//int row,col;
+	//float value;
+
 	for(int w = 0 ; w < rows + 1; w++)
 	{
-		fscanf(fd,"%d",&row);
-		csr_out.row_ptr[w] = row;
+		//fscanf(fd,"%d",&row);
+		csr_out.row_ptr[w] = row_entry.front();
+        row_entry.pop_front();
 	}
 	for(int w= 0 ; w < nnz; w++)
 	{	
-		fscanf(fd,"%d",&col);	
-		csr_out.col_ptr[w] = col;
+		//fscanf(fd,"%d",&col);	
+		csr_out.col_ptr[w] = col_entry.front();
+        col_entry.pop_front();
 	}
 	for(int w= 0 ; w < nnz; w++)
 	{
-		fscanf(fd,"%f",&value);	
-		csr_out.val[w] = value;
+		//fscanf(fd,"%f",&value);	
+		csr_out.val[w] = val_entry.front();
+        val_entry.pop_front();
 	}
 
 	printf("Finished reading csr %s\n",path);
