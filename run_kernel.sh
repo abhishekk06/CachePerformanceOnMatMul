@@ -2,15 +2,18 @@
 # Compile, Run and extract trace from matmul kernel
 
 export PIN_ROOT=/home/mdl/azk6085/CSE530/pin-3.18-98332-gaebd7b1e6-gcc-linux/
-input_file=${1:-'input_matrix.in'}
-build_type=${2:-'normal'}
+size=${1:-'10'}
+sparsity=${2:-'50'}
+input_file=${3:-'input_matrix.in'}
+build_type=${4:-'normal'}
 
-python utils/random_matrix_generator.py --n 100 --dump input_matrix.in
+python utils/random_matrix_generator.py --n $size --dump $input_file --sparsity $sparsity
 
 if [[ $build_type = "clean" ]];
 then
     echo 'clean build'
     rm -rf bin/
+    rm -rf traces/
 else
     echo 'recursive build'
 fi
@@ -48,7 +51,16 @@ do
   kernelname=$(echo $f| cut  -d'.' -f 1);
   filename="${kernelname}_traces.out"
   echo "Running $kernelname on $input_file"
-  time $PIN_ROOT/pin -t $PIN_ROOT/source/tools/ManualExamples/obj-intel64/pinatrace.so -- $entry --input_file $input_file
+  if [[ $kernelname = "matmul_csr" ]];
+  then
+	echo "Passing matrix in csr fmt"
+	csrA="csrA_${input_file}"
+	csrB="csrB_${input_file}"
+  	time $PIN_ROOT/pin -t $PIN_ROOT/source/tools/ManualExamples/obj-intel64/pinatrace.so -- $entry $csrA $csrB
+  else 
+	echo "Passing matrix in dense fmt"
+  	time $PIN_ROOT/pin -t $PIN_ROOT/source/tools/ManualExamples/obj-intel64/pinatrace.so -- $entry --input_file $input_file
+  fi
   head pinatrace.out  
   mv pinatrace.out traces/$filename  
 done

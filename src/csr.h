@@ -27,7 +27,7 @@ csr csr_generator(int size,int nnz ){
 	csr_out.col_ptr = (int *) malloc(5*sizeof(int));
 	csr_out.val = (float*) malloc(5*sizeof(float));
 
-	printf("Create CSR with size %d and sparsity %d\n", size, nnz);
+	//printf("Create CSR with size %d and sparsity %d\n", size, nnz);
 	csr_out.size = size;
 	int index; 
 	int last_nnz = 0;
@@ -74,14 +74,15 @@ csr csr_generator(int size,int nnz ){
 
 csr read_csr(char *path)
 {
-	printf("Read matrix %s\n",path);
+	//printf("Read matrix %s\n",path);
 	FILE *fd;
 	fd = fopen(path,"r");
 	int rows, nnz;
     deque <int> row_entry;
     deque <int> col_entry;
     deque <int> val_entry;
-    int prev_row_val = -1;
+    int cummulative_row_val = -1;
+    int prev_val = -1;
 	
 	std::ifstream f(path);
 	std::string line;
@@ -99,11 +100,13 @@ csr read_csr(char *path)
             if(num_line == 1)
             {
                 row_entry.push_back(substr_val);
-                prev_row_val = substr_val;
+                cummulative_row_val = substr_val;
+                prev_val = substr_val;
             }
-            if(prev_row_val != substr_val) {
-                prev_row_val += substr_val;
-                row_entry.push_back(prev_row_val);
+            if(prev_val != substr_val) {
+                cummulative_row_val += substr_val;
+                prev_val = substr_val;
+                row_entry.push_back(cummulative_row_val);
             } 
     
             // Populate col dq    
@@ -128,10 +131,10 @@ csr read_csr(char *path)
 	//fscanf(fd,"%d",&rows);
 	//fscanf(fd,"%d",&nnz);
     nnz = num_line - 1;
-	printf("Rows = %d Non-zero = %d \n",rows, nnz);
-    cout<<"Row dq size "<<row_entry.size()<<endl;
-    cout<<"Col dq size "<<col_entry.size()<<endl;
-    cout<<"Val dq size "<<val_entry.size()<<endl;
+	//printf("Rows = %d Non-zero = %d \n",rows, nnz);
+    //cout<<"Row dq size "<<row_entry.size()<<endl;
+    //cout<<"Col dq size "<<col_entry.size()<<endl;
+    //cout<<"Val dq size "<<val_entry.size()<<endl;
     //assert ((int)row_entry.size()==rows);
     assert ((int)col_entry.size()==nnz);
     assert ((int)val_entry.size()==nnz);
@@ -149,23 +152,26 @@ csr read_csr(char *path)
 	for(int w = 0 ; w < rows + 1; w++)
 	{
 		//fscanf(fd,"%d",&row);
+        //cout<<" Row: "<<row_entry.front()<<endl;
 		csr_out.row_ptr[w] = row_entry.front();
         row_entry.pop_front();
 	}
 	for(int w= 0 ; w < nnz; w++)
 	{	
+        //cout<<" Col: "<<col_entry.front()<<endl;
 		//fscanf(fd,"%d",&col);	
 		csr_out.col_ptr[w] = col_entry.front();
         col_entry.pop_front();
 	}
 	for(int w= 0 ; w < nnz; w++)
 	{
+        //cout<<" Val: "<<val_entry.front()<<endl;
 		//fscanf(fd,"%f",&value);	
 		csr_out.val[w] = val_entry.front();
         val_entry.pop_front();
 	}
 
-	printf("Finished reading csr %s\n",path);
+	//printf("Finished reading csr %s\n",path);
 	return csr_out ;
 
 }

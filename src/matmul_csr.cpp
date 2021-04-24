@@ -87,15 +87,15 @@ static void sgemm_csr(int M, int N, int K, struct csr A, struct csr B, struct cs
 		}
 	}
 
-	printf("A had %d non zero rows \n", c1 );
-	printf("B had %d non zero rows \n", c2 );
+	//printf("A had %d non zero rows \n", c1 );
+	//printf("B had %d non zero rows \n", c2 );
 
 }
 
 
 int main(int argc, char **argv) {
 
-	printf("Compute SGEMM using csr\n");
+	//printf("Compute SGEMM using csr\n");
 	csr A,B,C;
 
 
@@ -104,7 +104,7 @@ int main(int argc, char **argv) {
     //B = csr_generator(10, 3); //read_csr(argv[2]); 
 	A = read_csr(argv[1]);
     B = read_csr(argv[2]); 
-	printf("Matrix A and B is ready\n");
+	//printf("Matrix A and B is ready\n");
 	
 	parsec_roi_begin();
 	sgemm_csr(A.size,A.size,A.size,A,B,C);
