@@ -42,7 +42,7 @@ g++ -Wall src/matmul_csr.cpp src/csr.h -o bin/matmul_csr.o
 #g++ -std=c++98 -Wall -O3 -g src/matmul_csr.cpp src/csr.h -o bin/matmul_csr.o -pedantic
 
 echo Compiling Matmul_smash
-g++ -Wall src/matmul_smash.cpp src/smash.h -o bin/matmul_csr.o
+g++ -Wall src/matmul_smash.cpp src/smash.h -o bin/matmul_smash.o
 #g++ -std=c++98 -Wall -O3 -g src/matmul_smash.cpp src/smash.h -o bin/matmul_csr.o -pedantic
 
 for entry in bin/*.o
