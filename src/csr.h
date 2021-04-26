@@ -127,6 +127,7 @@ csr read_csr(char *path)
             val_entry.push_back(substr_val);
         } else {
 	        fscanf(fd,"%d",&rows);
+                row_entry.push_back(0);
         }
     }
 	//fscanf(fd,"%d",&rows);

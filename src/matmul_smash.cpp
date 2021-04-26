@@ -137,7 +137,7 @@ void spmm(){
 				
 	while(!B_visited){ 
 
-		printf("Move Bitmap B\n");
+		//printf("Move Bitmap B\n");
 		int col_changed = 0;
 
 		while(!col_changed){
@@ -162,9 +162,9 @@ void spmm(){
 								if(result == -1 ) A_visited = 1;
 								calculate_indices(&row_A,&col_A,matrix_A_smash);
 
-							printf("Progress bitmap A \n");
-							printf("Row A = %d \n",row_A);
-							printf("Col A = %d \n",col_A);
+							//printf("Progress bitmap A \n");
+							//printf("Row A = %d \n",row_A);
+							//printf("Col A = %d \n",col_A);
 
 							current_nza_index_A = matrix_A_smash.compression_ratio0*matrix_A_smash.current_block0;
 							if(row_A != curr_row_A){
@@ -177,9 +177,9 @@ void spmm(){
 								result = index_bitmaps(&matrix_B_smash);	
 								if(result == -1 ) return;
 								calculate_indices(&col_B,&row_B,matrix_B_smash);
-							printf("Progress bitmap B \n");
-							printf("Row B = %d \n",row_B);
-							printf("Col B = %d \n",col_B);
+							//printf("Progress bitmap B \n");
+							//printf("Row B = %d \n",row_B);
+							//printf("Col B = %d \n",col_B);
 							
 							if( col_B != current_column_B){ 
 									temp_B_smash = matrix_B_smash;
@@ -191,7 +191,7 @@ void spmm(){
 				}
 				else if (col_A == row_B) {
 							
-							printf("Multiply blocks \n");
+							//printf("Multiply blocks \n");
 
 							for(int e=0; e < matrix_A_smash.compression_ratio0; e++){ 
 									C[row_A*matrix_A_smash.columns+col_B] = matrix_A_smash.nza[current_nza_index_A]*matrix_B_smash.nza[current_nza_index_B];
@@ -200,14 +200,15 @@ void spmm(){
 							}
 								result = index_bitmaps(&matrix_A_smash);
 								if(result == -1 ){
-									printf("Completed A \n");
+									//printf("Completed A \n");
 									A_visited = 1;
 								} 
 								calculate_indices(&row_A,&col_A,matrix_A_smash);
+							#ifdef DEBUG
 							printf("Progress bitmap A after multiplication \n");
 							printf("Row A = %d \n",row_A);
 							printf("Col A = %d \n",col_A);
-
+							#endif		
 							current_nza_index_A = matrix_A_smash.compression_ratio0*matrix_A_smash.current_block0;
 
 							if(row_A != curr_row_A){  // if we change row in A, roll-back Bitmap B 
