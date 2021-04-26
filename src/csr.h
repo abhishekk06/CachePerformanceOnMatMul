@@ -131,6 +131,7 @@ csr read_csr(char *path)
     }
 	//fscanf(fd,"%d",&rows);
 	//fscanf(fd,"%d",&nnz);
+    row_entry.push_back(cummulative_row_val);
     nnz = num_line - 1;
 	//printf("Rows = %d Non-zero = %d \n",rows, nnz);
     //cout<<"Row dq size "<<row_entry.size()<<endl;

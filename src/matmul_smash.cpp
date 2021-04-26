@@ -103,7 +103,7 @@ void spmm(){
 
 
 	#ifdef DEBUG
-		printf("NZA blocks A %d\n",matrix_A_smash.nza_blocks);
+	printf("NZA blocks A %d\n",matrix_A_smash.nza_blocks);
         printf("NZA blocks B %d\n",matrix_B_smash.nza_blocks);
 
 	#endif
@@ -236,7 +236,7 @@ int main(int argc, char* argv[])
 	parse_opt(argc,argv);
 
 	csr matrix_A_csr = read_csr(path1);
-        csr matrix_B_csr = read_csr(path1);
+        csr matrix_B_csr = read_csr(path2);
 
 	construct_format(&matrix_A_smash,comp0,comp1,comp2);	
 	construct_bitmap0_nza(&matrix_A_smash,&matrix_A_csr);
