@@ -77,11 +77,12 @@ csr read_csr(char *path)
 	//printf("Read matrix %s\n",path);
 	FILE *fd;
 	fd = fopen(path,"r");
+        if (fd == NULL) perror ("Error opening file");
 	int rows, nnz;
     deque <int> row_entry;
     deque <int> col_entry;
     deque <int> val_entry;
-    int cummulative_row_val = -1;
+    int cummulative_row_val = 0;
     int prev_val = -1;
 	
 	std::ifstream f(path);
@@ -99,16 +100,16 @@ csr read_csr(char *path)
             //cout<<"Row:"<<substr_val<<endl;
             if(num_line == 1)
             {
-                row_entry.push_back(substr_val);
-                cummulative_row_val = substr_val;
                 prev_val = substr_val;
             }
             if(prev_val != substr_val) {
-                cummulative_row_val += substr_val;
                 prev_val = substr_val;
                 row_entry.push_back(cummulative_row_val);
             } 
-    
+
+            //Increase the number of NZA values     
+            cummulative_row_val++;
+
             // Populate col dq    
             first = line.find(", Col: ");
             last = line.find(", Val:");

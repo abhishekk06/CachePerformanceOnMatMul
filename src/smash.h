@@ -219,7 +219,7 @@ void construct_bitmap1(smash *format){
 			
 			if(previous_block != block){
 				new_bitmap0_blocks++;
-				if(new_bitmap0_blocks % 64 ==0)
+				if(new_bitmap0_blocks % 64 == 0)
 					new_bitmap0 = (unsigned long*)realloc(new_bitmap0,new_bitmap0_blocks*sizeof(unsigned long));
 								
 				#ifdef DEBUG
