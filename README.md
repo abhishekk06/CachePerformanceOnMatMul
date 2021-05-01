@@ -11,5 +11,3 @@ For running simulator:-
 source run_simulator.sh <path to traces>
 
 
-Sample Output:
-![image](https://user-images.githubusercontent.com/55446334/115338604-22135200-a171-11eb-8334-e79ad68bc270.png)
