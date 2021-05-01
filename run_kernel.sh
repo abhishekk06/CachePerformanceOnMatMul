@@ -50,17 +50,27 @@ do
   f=$(echo "${entry##*/}");
   kernelname=$(echo $f| cut  -d'.' -f 1);
   filename="${kernelname}_traces.out"
-  echo "Running $kernelname on $input_file"
   if [[ $kernelname = "matmul_csr" ]];
   then
 	echo "Passing matrix in csr fmt"
+  	echo "Running $kernelname on $input_file"
 	csrA="csrA_${input_file}"
 	csrB="csrB_${input_file}"
   	time $PIN_ROOT/pin -t $PIN_ROOT/source/tools/ManualExamples/obj-intel64/pinatrace.so -- $entry $csrA $csrB
+  elif [[ $kernelname = "matmul_smash" ]];
+  then 	
+	echo "Passing matrix in csr fmt"  
+  	echo "Running $kernelname on $input_file"
+	csrA="csrA_${input_file}"
+	csrB="csrB_${input_file}"
+  	time $PIN_ROOT/pin -t $PIN_ROOT/source/tools/ManualExamples/obj-intel64/pinatrace.so -- $entry -f 2 -s 2 -t 2 -i $csrA -k $csrB
   else 
 	echo "Passing matrix in dense fmt"
+  	echo "Running $kernelname on $input_file"
   	time $PIN_ROOT/pin -t $PIN_ROOT/source/tools/ManualExamples/obj-intel64/pinatrace.so -- $entry --input_file $input_file
   fi
   head pinatrace.out  
   mv pinatrace.out traces/$filename  
 done
+
+source run_simulator.sh /home/mdl/azk6085/CSE530/CachePerformanceOnMatMul/traces
