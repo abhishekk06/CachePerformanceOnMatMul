@@ -202,6 +202,9 @@ def build_hierarchy(configs, logger):
     return hierarchy
 
 def build_cache(configs, name, next_level_cache, logger):
+    if not 'policy' in configs[name]:
+        configs[name]['policy'] = None
+
     return cache.Cache(name,
                 configs['architecture']['word_size'],
                 configs['architecture']['block_size'],
@@ -211,7 +214,8 @@ def build_cache(configs, name, next_level_cache, logger):
                 configs[name]['hit_time'],
                 configs['architecture']['write_back'],
                 logger,
-                next_level_cache)
+                next_level_cache,
+                configs[name]['policy'])
 
 
 if __name__ == '__main__':

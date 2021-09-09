@@ -2,7 +2,7 @@ import math, block, response
 import pprint
 
 class Cache:
-    def __init__(self, name, word_size, block_size, n_blocks, associativity, hit_time, write_time, write_back, logger, next_level=None):
+    def __init__(self, name, word_size, block_size, n_blocks, associativity, hit_time, write_time, write_back, logger, next_level=None, policy =None):
         #Parameters configured by the user
         self.name = name
         self.word_size = word_size
@@ -23,6 +23,9 @@ class Cache:
         #Pointer to the next lowest level of memory
         #Main memory gets the default None value
         self.next_level = next_level
+
+        #Setting the policy to Inclusive or Exclusive or None
+        self.policy = policy
 
         #Figure out spans to cut the binary addresses into block_offset, index, and tag
         self.block_offset_size = int(math.log(self.block_size, 2))
@@ -58,24 +61,32 @@ class Cache:
                 r = self.next_level.read(address, current_step)
                 r.deepen(self.write_time, self.name)
 
-                #If there's space in this set, add this block to it
-                if len(in_cache) < self.associativity:
-                    self.data[index][tag] = block.Block(self.block_size, current_step, False, address)
+
+                if self.policy == 'Inclusive':
+                    print('Inclusive cache')
+                    #TODO: your code here
+                elif self.policy == 'Exclusive':
+                    print('Exclusive cache')
+                    #TODO: your code here
                 else:
-                    #Find the oldest block and replace it
-                    oldest_tag = in_cache[0] 
-                    for b in in_cache:
-                        if self.data[index][b].last_accessed < self.data[index][oldest_tag].last_accessed:
-                            oldest_tag = b
-                    #Write the block back down if it's dirty and we're using write back
-                    if self.write_back:
-                        if self.data[index][oldest_tag].is_dirty():
-                            self.logger.info('\tWriting back block ' + address + ' to ' + self.next_level.name)
-                            temp = self.next_level.write(self.data[index][oldest_tag].address, True, current_step)
-                            r.time += temp.time
-                    #Delete the old block and write the new one
-                    del self.data[index][oldest_tag]
-                    self.data[index][tag] = block.Block(self.block_size, current_step, False, address)
+                    #If there's space in this set, add this block to it
+                    if len(in_cache) < self.associativity:
+                       self.data[index][tag] = block.Block(self.block_size, current_step, False, address)
+                    else:
+                       #Find the oldest block and replace it
+                       oldest_tag = in_cache[0] 
+                       for b in in_cache:
+                          if self.data[index][b].last_accessed < self.data[index][oldest_tag].last_accessed:
+                             oldest_tag = b
+                       #Write the block back down if it's dirty and we're using write back
+                       if self.write_back:
+                          if self.data[index][oldest_tag].is_dirty():
+                             self.logger.info('\tWriting back block ' + address + ' to ' + self.next_level.name)
+                             temp = self.next_level.write(self.data[index][oldest_tag].address, True, current_step)
+                             r.time += temp.time
+                       #Delete the old block and write the new one
+                       del self.data[index][oldest_tag]
+                       self.data[index][tag] = block.Block(self.block_size, current_step, False, address)
 
         return r
    
