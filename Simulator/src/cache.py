@@ -137,7 +137,7 @@ class Cache:
                           oldest_tag = in_cache[0]
                           for b in in_cache:
                               if self.data[index][b].last_accessed < self.data[index][oldest_tag].last_accessed:
-                              oldest_tag = b
+                                 oldest_tag = b
                           if self.write_back:
                              if self.data[index][oldest_tag].is_dirty():
                                 self.logger.info('\tWriting back block ' + address + ' to ' + self.next_level.name)
