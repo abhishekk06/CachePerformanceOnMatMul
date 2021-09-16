@@ -99,8 +99,8 @@ int main (int argc, char* argv[]) {
 	} else {
 		filename = argv[2];
 	}
-    parsec_roi_begin();
 	Result result = read (filename);
+    parsec_roi_begin();
 	vector< vector<int> > C = ijkalgorithm(result.A, result.B);
     parsec_roi_end();
 	//printMatrix(C);
